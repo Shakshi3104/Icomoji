@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CE5E38EA2D16FCCA00877D6D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CE5E38E92D16FCCA00877D6D /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		CE5E38902D167F7B00877D6D /* Icomoji.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Icomoji.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE5E38E92D16FCCA00877D6D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +37,7 @@
 		CE5E38872D167F7A00877D6D = {
 			isa = PBXGroup;
 			children = (
+				CE5E38E92D16FCCA00877D6D /* README.md */,
 				CE5E38CE2D16B8E900877D6D /* Icomoji */,
 				CE5E38912D167F7B00877D6D /* Products */,
 			);
@@ -109,6 +115,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE5E38EA2D16FCCA00877D6D /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
