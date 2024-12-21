@@ -147,6 +147,9 @@ struct IcomojiView: View {
                 renderGenmojiIcon()
             }
         }
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     }
     
     // render Icomoji icon by Genmoji to PNG image
