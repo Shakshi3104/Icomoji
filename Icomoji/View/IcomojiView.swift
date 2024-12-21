@@ -67,41 +67,57 @@ struct IcomojiView: View {
     @State private var photo = ScreenshotItem(image: Image("appicon"), caption: "sample")
     
     var body: some View {
-        VStack {
-            if let emojiString {
-                EmojiIconView(emojiString: emojiString,
-                              backgroundColor: backgroundColor)
-                .padding()
-            } else {
-                GenmojiIconView(iconImage: iconImage,
-                                backgroundColor: backgroundColor)
-                .padding()
+        
+        List {
+            Section("Preview") {
+                HStack {
+                    Spacer()
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(backgroundColor)
+                        
+                        Group {
+                            if let iconImage {
+                                iconImage
+                            } else if let emojiString {
+                                Text(emojiString)
+                                    .font(.system(size: 100))
+                            }
+                        }
+                    }
+                    .frame(width: 300, height: 300)
+                    .padding()
+                    Spacer()
+                }
             }
             
-            VStack {
+            Section {
                 HStack {
-                    Text("Emoji or Genmoji")
+                    Text("Emoji")
                     Spacer()
-                        .frame(width: 140)
-                    
                     GenmojiTextField(text: $textInput)
-                        .frame(width: 50, height: 45)
+                        .frame(width: 30)
                 }
+                .padding(.vertical, 8)
+                    
+                
                 ColorPicker(selection: $backgroundColor, supportsOpacity: false) {
                     Text("Background Color")
                 }
+                .padding(.vertical, 8)
             }
-            .padding()
-            
-            Spacer()
-            
-            ShareLink(
-                item: photo,
-                subject: Text("Share Genmoji icon"),
-                preview: SharePreview(photo.caption, image: photo.image)
-            )
+        }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                ShareLink(
+                    item: photo,
+                    subject: Text("Share Genmoji icon"),
+                    preview: SharePreview(photo.caption, image: photo.image)
+                )
+            }
         }
         .onChange(of: textInput) { oldText, newText in
+            print("text change")
             if let uiImage = newText?.getGenmoji() {
                 iconImage = Image(uiImage: uiImage.resize(width: 100, height: 100))
                 emojiString = nil
@@ -115,9 +131,17 @@ struct IcomojiView: View {
                 renderEmojiIcon()
             }
         }
-        .padding()
+        .onChange(of: backgroundColor) { _, _ in
+            print("Background color change")
+            if let _ = emojiString {
+                renderEmojiIcon()
+            }
+            else if let _ = iconImage {
+                renderGenmojiIcon()
+            }
+        }
         .onAppear {
-            if let emojiString {
+            if let _ = emojiString {
                 renderEmojiIcon()
             } else {
                 renderGenmojiIcon()
