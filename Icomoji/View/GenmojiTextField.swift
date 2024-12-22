@@ -17,7 +17,7 @@ struct GenmojiTextField: UIViewRepresentable {
         textView.attributedText = text
         // Enabling editability
         textView.isEditable = true
-        textView.font = UIFont.systemFont(ofSize: 12)
+        textView.font = UIFont.systemFont(ofSize: 14)
         
         // Enabling the genmoji creation
         textView.supportsAdaptiveImageGlyph = true
