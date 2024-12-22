@@ -26,7 +26,7 @@ struct GenmojiIconView: View {
     
     var body: some View {
         ZStack(alignment: .center){
-            RoundedRectangle(cornerRadius: 8)
+            Rectangle()
                 .foregroundStyle(backgroundColor)
             
             Image(uiImage: iconImage.resize(width: size, height: size))
@@ -43,7 +43,7 @@ struct EmojiIconView: View {
     
     var body: some View {
         ZStack(alignment: .center){
-            RoundedRectangle(cornerRadius: 8)
+            Rectangle()
                 .foregroundStyle(backgroundColor)
             
             Text(emojiString)
@@ -107,7 +107,6 @@ struct IcomojiView: View {
                         .frame(width: 30)
                 }
                 .padding(.vertical, 8)
-                    
                 
                 ColorPicker(selection: $backgroundColor, supportsOpacity: false) {
                     Text("Background Color")
@@ -136,6 +135,7 @@ struct IcomojiView: View {
             }
         }
         .onChange(of: textInput) { oldText, newText in
+            // Extract emoji or genmoji from input text
             print("text change")
             if let uiImage = newText?.getGenmoji() {
                 iconImage = uiImage
@@ -151,6 +151,7 @@ struct IcomojiView: View {
             }
         }
         .onChange(of: backgroundColor) { _, _ in
+            // Change background color
             print("Background color change")
             if let _ = emojiString {
                 renderEmojiIcon()
@@ -160,6 +161,7 @@ struct IcomojiView: View {
             }
         }
         .onChange(of: size, { _, _ in
+            // Change icon size
             if !isEditing {
                 print("Size change")
                 if let _ = emojiString {
@@ -194,6 +196,7 @@ struct IcomojiView: View {
         }
     }
     
+    // render Icomoji icon by Emoji to PNG image
     func renderEmojiIcon() {
         DispatchQueue.main.async {
             let renderer = ImageRenderer(content: EmojiIconView(emojiString: emojiString ?? "?", backgroundColor: backgroundColor, size: size))
