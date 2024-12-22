@@ -15,10 +15,29 @@
 		CE5E38E92D16FCCA00877D6D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CE5E39582D183D0800877D6D /* Exceptions for "materials" folder in "Icomoji" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"icomoji-emoji.png",
+				"icomoji-sticker.png",
+			);
+			target = CE5E388F2D167F7B00877D6D /* Icomoji */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE5E38CE2D16B8E900877D6D /* Icomoji */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Icomoji;
+			sourceTree = "<group>";
+		};
+		CE5E39552D183BDB00877D6D /* materials */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CE5E39582D183D0800877D6D /* Exceptions for "materials" folder in "Icomoji" target */,
+			);
+			path = materials;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -37,6 +56,7 @@
 		CE5E38872D167F7A00877D6D = {
 			isa = PBXGroup;
 			children = (
+				CE5E39552D183BDB00877D6D /* materials */,
 				CE5E38E92D16FCCA00877D6D /* README.md */,
 				CE5E38CE2D16B8E900877D6D /* Icomoji */,
 				CE5E38912D167F7B00877D6D /* Products */,
@@ -68,6 +88,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				CE5E38CE2D16B8E900877D6D /* Icomoji */,
+				CE5E39552D183BDB00877D6D /* materials */,
 			);
 			name = Icomoji;
 			packageProductDependencies = (
