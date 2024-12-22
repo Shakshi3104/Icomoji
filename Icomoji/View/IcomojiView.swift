@@ -55,17 +55,23 @@ struct EmojiIconView: View {
 
 // MARK: - IcomojiView
 struct IcomojiView: View {
+    /// Inputted text that includes emojis, genmojis, or memojis.
     @State var textInput: NSAttributedString? = NSAttributedString(string: "😄")
-    @State var textToDisplay: NSAttributedString? = nil
     
+    /// Inputted genmoji or memoji
     @State var iconImage: UIImage? = nil
+    /// Inputted emoji
     @State var emojiString: String? = "😄"
     
+    /// Icon image background color
     @State var backgroundColor: Color = .blue
+    /// Icon size
     @State var size: CGFloat = 100
     
+    /// Share Link item
     @State private var photo = ScreenshotItem(image: Image("appicon"), caption: "Icon image")
     
+    /// slider editting flag
     @State private var isEditing = false
     
     var body: some View {
@@ -172,6 +178,7 @@ struct IcomojiView: View {
             }
         }
         .onTapGesture {
+            // Close keyboard
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
