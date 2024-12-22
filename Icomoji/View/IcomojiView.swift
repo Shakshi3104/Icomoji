@@ -20,19 +20,16 @@ struct ScreenshotItem: Transferable {
 
 // MARK: - GenmojiIconView
 struct GenmojiIconView: View {
-    @State var iconImage: Image?
+    @State var iconImage: UIImage
     @State var backgroundColor: Color
+    @State var size: CGFloat
     
     var body: some View {
         ZStack(alignment: .center){
             RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(backgroundColor)
             
-            if let _ = iconImage {
-                iconImage
-            } else {
-                Image(systemName: "apple.image.playground")
-            }
+            Image(uiImage: iconImage.resize(width: size, height: size))
         }
         .frame(width: 300, height: 300)
     }
@@ -42,6 +39,7 @@ struct GenmojiIconView: View {
 struct EmojiIconView: View {
     @State var emojiString: String
     @State var backgroundColor: Color
+    @State var size: CGFloat
     
     var body: some View {
         ZStack(alignment: .center){
@@ -49,7 +47,7 @@ struct EmojiIconView: View {
                 .foregroundStyle(backgroundColor)
             
             Text(emojiString)
-                .font(.system(size: 100))
+                .font(.system(size: size))
         }
         .frame(width: 300, height: 300)
     }
@@ -59,12 +57,16 @@ struct EmojiIconView: View {
 struct IcomojiView: View {
     @State var textInput: NSAttributedString? = NSAttributedString(string: "😄")
     @State var textToDisplay: NSAttributedString? = nil
-    @State var iconImage: Image? = nil
+    
+    @State var iconImage: UIImage? = nil
     @State var emojiString: String? = "😄"
     
     @State var backgroundColor: Color = .blue
+    @State var size: CGFloat = 100
     
-    @State private var photo = ScreenshotItem(image: Image("appicon"), caption: "sample")
+    @State private var photo = ScreenshotItem(image: Image("appicon"), caption: "Icon image")
+    
+    @State private var isEditing = false
     
     var body: some View {
         
@@ -78,10 +80,10 @@ struct IcomojiView: View {
                         
                         Group {
                             if let iconImage {
-                                iconImage
+                                Image(uiImage: iconImage.resize(width: size, height: size))
                             } else if let emojiString {
                                 Text(emojiString)
-                                    .font(.system(size: 100))
+                                    .font(.system(size: size))
                             }
                         }
                     }
@@ -105,6 +107,17 @@ struct IcomojiView: View {
                     Text("Background Color")
                 }
                 .padding(.vertical, 8)
+                
+                HStack {
+                    Text("Icon size")
+                    Spacer()
+                        .frame(width: 40)
+                    Slider(value: $size, in: 50...250,
+                           onEditingChanged: { editing in
+                        isEditing = editing
+                    })
+                }
+                .padding(.vertical, 8)
             }
         }
         .toolbar {
@@ -119,7 +132,7 @@ struct IcomojiView: View {
         .onChange(of: textInput) { oldText, newText in
             print("text change")
             if let uiImage = newText?.getGenmoji() {
-                iconImage = Image(uiImage: uiImage.resize(width: 100, height: 100))
+                iconImage = uiImage
                 emojiString = nil
                 // render
                 renderGenmojiIcon()
@@ -140,6 +153,17 @@ struct IcomojiView: View {
                 renderGenmojiIcon()
             }
         }
+        .onChange(of: size, { _, _ in
+            if !isEditing {
+                print("Size change")
+                if let _ = emojiString {
+                    renderEmojiIcon()
+                }
+                else if let _ = iconImage {
+                    renderGenmojiIcon()
+                }
+            }
+        })
         .onAppear {
             if let _ = emojiString {
                 renderEmojiIcon()
@@ -155,7 +179,7 @@ struct IcomojiView: View {
     // render Icomoji icon by Genmoji to PNG image
     func renderGenmojiIcon() {
         DispatchQueue.main.async {
-            let renderer = ImageRenderer(content: GenmojiIconView(iconImage: iconImage, backgroundColor: backgroundColor))
+            let renderer = ImageRenderer(content: GenmojiIconView(iconImage: iconImage ?? UIImage(), backgroundColor: backgroundColor, size: size))
             
             if let uiImage = renderer.uiImage {
                 photo.image = Image(uiImage: uiImage)
@@ -165,7 +189,7 @@ struct IcomojiView: View {
     
     func renderEmojiIcon() {
         DispatchQueue.main.async {
-            let renderer = ImageRenderer(content: EmojiIconView(emojiString: emojiString ?? "?", backgroundColor: backgroundColor))
+            let renderer = ImageRenderer(content: EmojiIconView(emojiString: emojiString ?? "?", backgroundColor: backgroundColor, size: size))
             
             if let uiImage = renderer.uiImage {
                 photo.image = Image(uiImage: uiImage)
