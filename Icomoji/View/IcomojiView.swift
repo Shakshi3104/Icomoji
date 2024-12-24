@@ -74,6 +74,9 @@ struct IcomojiView: View {
     /// slider editting flag
     @State private var isEditing = false
     
+    /// Background flag
+    @State private var hasBackground = true
+    
     var body: some View {
         
         List {
@@ -83,6 +86,7 @@ struct IcomojiView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundStyle(backgroundColor)
+                            .opacity(hasBackground ? 1.0 : 0.0)
                         
                         Group {
                             if let iconImage {
@@ -99,19 +103,21 @@ struct IcomojiView: View {
                 }
             }
             
-            Section {
+            Section("Edit") {
                 HStack {
                     Text("Emoji")
                     Spacer()
                     GenmojiTextField(text: $textInput)
                         .frame(width: 30)
                 }
-                .padding(.vertical, 8)
+                
+                Toggle("Background", isOn: $hasBackground)
                 
                 ColorPicker(selection: $backgroundColor, supportsOpacity: false) {
                     Text("Background Color")
+                        .foregroundStyle(hasBackground ? Color.primary : Color.secondary)
                 }
-                .padding(.vertical, 8)
+                .disabled(!hasBackground)
                 
                 HStack {
                     Text("Icon size")
@@ -122,7 +128,6 @@ struct IcomojiView: View {
                         isEditing = editing
                     })
                 }
-                .padding(.vertical, 8)
             }
         }
         .toolbar {
@@ -160,6 +165,16 @@ struct IcomojiView: View {
                 renderGenmojiIcon()
             }
         }
+        .onChange(of: hasBackground, { _, _ in
+            // Change background have or not
+            print("hasBackground change")
+            if let _ = emojiString {
+                renderEmojiIcon()
+            }
+            else if let _ = iconImage {
+                renderGenmojiIcon()
+            }
+        })
         .onChange(of: size, { _, _ in
             // Change icon size
             if !isEditing {
@@ -188,7 +203,7 @@ struct IcomojiView: View {
     // render Icomoji icon by Genmoji to PNG image
     func renderGenmojiIcon() {
         DispatchQueue.main.async {
-            let renderer = ImageRenderer(content: GenmojiIconView(iconImage: iconImage ?? UIImage(), backgroundColor: backgroundColor, size: size))
+            let renderer = ImageRenderer(content: GenmojiIconView(iconImage: iconImage ?? UIImage(), backgroundColor: backgroundColor.opacity(hasBackground ? 1.0 : 0.0), size: size))
             
             if let uiImage = renderer.uiImage {
                 photo.image = Image(uiImage: uiImage)
@@ -199,7 +214,7 @@ struct IcomojiView: View {
     // render Icomoji icon by Emoji to PNG image
     func renderEmojiIcon() {
         DispatchQueue.main.async {
-            let renderer = ImageRenderer(content: EmojiIconView(emojiString: emojiString ?? "?", backgroundColor: backgroundColor, size: size))
+            let renderer = ImageRenderer(content: EmojiIconView(emojiString: emojiString ?? "?", backgroundColor: backgroundColor.opacity(hasBackground ? 1.0 : 0.0), size: size))
             
             if let uiImage = renderer.uiImage {
                 photo.image = Image(uiImage: uiImage)

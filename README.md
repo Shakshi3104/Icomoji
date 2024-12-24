@@ -4,7 +4,7 @@
 
 | Emoji | Sticker | Genmoji |
 | :---: | :----:  | :----: |
-|![](materials/icomoji-emoji.png) | ![](materials/icomoji-sticker.png) | Under construction... |
+|![](materials/icomoji-emoji.png) | ![](materials/icomoji-sticker.png) | ![](materials/icomoji-genmoji.png) |
 
 ## Requirements
 - Xcode 16+
